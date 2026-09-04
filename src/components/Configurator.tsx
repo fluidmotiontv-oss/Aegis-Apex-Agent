@@ -1,12 +1,12 @@
 import { motion } from 'motion/react';
 import { AgentConfig } from '../types';
-import { Bot, Workflow, Fingerprint, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Bot, Workflow, Fingerprint, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
   config: AgentConfig;
   setConfig: React.Dispatch<React.SetStateAction<AgentConfig>>;
-  onDeploy: () => void;
+  onDeploy: (config: AgentConfig) => void;
 }
 
 const PERSONA_PRESETS = [
@@ -46,7 +46,18 @@ export function Configurator({ config, setConfig, onDeploy }: Props) {
   const nextStep = () => setStep(s => Math.min(s + 1, 3));
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
-  const generatedSystemPrompt = `You are ${config.name}, a highly capable agent.
+  const handleSafeDeploy = () => {
+    const safeConfig = { ...config };
+    if (!safeConfig.name || safeConfig.name.trim() === '') safeConfig.name = 'Aegis Apex';
+    if (!safeConfig.directive || safeConfig.directive.trim() === '') safeConfig.directive = 'Provide highly capable, helpful, and logical assistance.';
+    if (!safeConfig.knowledgeBase || safeConfig.knowledgeBase.trim() === '') safeConfig.knowledgeBase = 'General Knowledge';
+    if (!safeConfig.tone || safeConfig.tone.trim() === '') safeConfig.tone = 'Analytical';
+    
+    setConfig(safeConfig);
+    onDeploy(safeConfig);
+  };
+
+  const generatedSystemPrompt = `You are ${config.name || 'Aegis Apex'}, a highly capable agent.
 Core Directive: ${config.directive}
 Tone: ${config.tone}
 Autonomy Level: ${config.autonomyLevel}
@@ -220,7 +231,7 @@ Tools Allowed: ${config.toolCalling}`;
             Next Phase <ArrowRight className="w-4 h-4" />
           </button>
         ) : (
-          <button onClick={onDeploy} className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:opacity-90 rounded-full flex items-center gap-2 font-medium shadow-lg shadow-indigo-500/25 relative overflow-hidden group">
+          <button onClick={handleSafeDeploy} className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:opacity-90 rounded-full flex items-center gap-2 font-medium shadow-lg shadow-indigo-500/25 relative overflow-hidden group">
             <span className="relative z-10 flex items-center gap-2">
               Initiate Apex Deployment <Sparkles className="w-4 h-4" />
             </span>

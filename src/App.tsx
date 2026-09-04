@@ -10,6 +10,7 @@ import { Landing } from './components/Landing';
 import { Configurator } from './components/Configurator';
 import { Synthesizer } from './components/Synthesizer';
 import { ChatInterface } from './components/ChatInterface';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const DEFAULT_CONFIG: AgentConfig = {
   name: '',
@@ -42,7 +43,10 @@ export default function App() {
 
   const handleStart = () => setView('configuring');
   
-  const handleDeploy = () => setView('synthesizing');
+  const handleDeploy = (validatedConfig: AgentConfig) => {
+    setConfig(validatedConfig);
+    setView('synthesizing');
+  };
   
   const handleSynthesisComplete = () => {
     localStorage.setItem('aegis_agent_config', JSON.stringify(config));
@@ -56,8 +60,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col items-center justify-center p-6 relative overflow-hidden selection:bg-indigo-500/30">
-      {/* Technical grid background */}
+    <ErrorBoundary>
+      <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col items-center justify-center p-6 relative overflow-hidden selection:bg-indigo-500/30">
+        {/* Technical grid background */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-20"
         style={{
@@ -97,6 +102,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }

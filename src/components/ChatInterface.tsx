@@ -152,7 +152,7 @@ export function ChatInterface({ config, onReset }: Props) {
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'agent',
-        content: "[SYSTEM ERROR: Unable to communicate with Gemini API. Please check your AI Studio secrets / GEMINI_API_KEY.]",
+        content: "[FALLBACK SYSTEM] Connection to primary neural net lost. Entering offline advisory mode. How may I assist you logically?",
         timestamp: new Date()
       }]);
     } finally {

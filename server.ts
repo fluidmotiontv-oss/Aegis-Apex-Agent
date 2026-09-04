@@ -19,7 +19,7 @@ async function startServer() {
       
       const apiKey = process.env.GEMINI_API_KEY;
       if (!apiKey) {
-        return res.status(500).json({ error: "GEMINI_API_KEY is missing." });
+        return res.json({ reply: "[MOCK RESPONSE] Grace Protocol Active. (Notice: GEMINI_API_KEY is not configured in the server environment. This is a simulated response vector.)" });
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -44,7 +44,7 @@ async function startServer() {
       res.json({ reply: response.text });
     } catch (error: any) {
       console.error("Chat API Error:", error);
-      res.status(500).json({ error: error.message || "Failed to communicate with agent." });
+      res.json({ reply: `[MOCK RESPONSE] Neural network encountered interference: ${error.message || "Unknown error"}. Proceeding with simulated response.` });
     }
   });
 

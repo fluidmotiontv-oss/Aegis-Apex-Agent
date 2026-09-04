@@ -25,8 +25,12 @@ export function Synthesizer({ config, onComplete }: Props) {
 
   useEffect(() => {
     // Generate and download JSON file when synthesis starts
+    const fallbackName = config?.name || 'Agent';
+    const fallbackDirective = config?.directive || 'unspecified';
+    const safeNameStr = fallbackName.toLowerCase().replace(/\s+/g, '_') || 'agent';
+
     const blob = new Blob([JSON.stringify({
-      systemInstruction: `You are ${config.name}. Core Directive: ${config.directive}`,
+      systemInstruction: `You are ${fallbackName}. Core Directive: ${fallbackDirective}`,
       parameters: config,
       version: "1.0-apex"
     }, null, 2)], { type: "application/json" });
@@ -34,7 +38,7 @@ export function Synthesizer({ config, onComplete }: Props) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${config.name.toLowerCase().replace(/\s+/g, '_')}_spec.json`;
+    a.download = `${safeNameStr}_spec.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
