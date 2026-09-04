@@ -1,0 +1,8 @@
+{
+  "name": "Aegis Agent Generator",
+  "description": "Welcome to Aegis. We will gently guide you through the agent generation process.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
